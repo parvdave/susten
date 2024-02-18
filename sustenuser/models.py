@@ -29,15 +29,10 @@ class TreeHacksUser(AbstractUser):
 class Message(models.Model):
     user_id = models.CharField(max_length = 100, blank=True)
     text = models.CharField(max_length=2000,blank=True)
-    create_time = models.BigIntegerField()
-
-class MessageIntent(models.Model):
-    user_id = models.CharField(max_length = 100, blank=True)
-    text = models.CharField(max_length=2000,blank=True)
+    isRequest = models.BooleanField(default=True)
     create_time = models.BigIntegerField()
     create_date = models.CharField(max_length=100,blank=True)
-    intent = models.CharField(max_length=50,blank=True)
-    score = models.FloatField()
+    score = models.FloatField(default=0.0)
 
 class Score(models.Model):
     user_id = models.CharField(max_length = 100, blank=True)
@@ -45,6 +40,7 @@ class Score(models.Model):
     intent = models.CharField(max_length=50,blank=True)
 
 class Store(models.Model):
+    store_username = models.CharField(max_length=200,unique=True,default="")
     name = models.CharField(max_length=2000, blank = True)
     rating = models.FloatField(validators=
                                [MinValueValidator(0.0),MaxValueValidator(5.0)])
@@ -54,5 +50,15 @@ class Store(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=2000, blank=True)
-    cost = models.FloatField(max_length=2000,blank=True)
+    cost = models.FloatField(default=0.0)
+    store_id = models.CharField(max_length=200,blank=True)
     item_type = models.FloatField(max_length=2000,blank=True)
+
+class Order(models.Model):
+    store_username = models.CharField(max_length=2000,blank=True)
+    username = models.CharField(max_length=200,blank=True)
+    cost = models.FloatField(default=0.0)
+
+class OrderItem(models.Model):
+    order_id = models.IntegerField(null=False)
+    item_id = models.IntegerField(null=False)
