@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/sustenuser/style.css' %}">
+    <link rel="stylesheet" href="{% static '/sustenuser/progress_bar.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="flex-container" style="display: flex; gap: 10%;" id="header"> 
+            <div><a href="{% url 'progress-view' %}"> <img src="{% static '/sustenuser/back_button.svg' %}" style="margin-top: 35px;"/> </a></div>
+            <div><h1>Chat with Sustaino</h1></div>
+        </div>
+        <div id="chatbot">
+            <div id="conversation">
+              <div class="chatbot-message">
+                <p class="chatbot-text" onload="onLoadBody()">Hello! Feel free to ask me anything you want to know about sustainability!!</p>
+              </div>
+            </div>
+            <form id="input-form">
+              <message-container>
+                <input id="input-field" type="text" placeholder="Type your message here" onkeyup="checkInput();">
+                <button id="submit-button" type="submit">
+                  <img class="send-icon" src="{% static 'sustenuser/submit-message.svg' %}" alt="">
+                </button>
+              </message-container>
+            </form>
+        </div>  
+
+    </div>
+
+    <script src="{% static 'sustenuser/js/script.js' %}"></script>
+</body>
+
+</html>
+<script>
+  inputForm.addEventListener('submit', function(event) {
+  // Prevent form submission
+      event.preventDefault();
+      const chatbot = document.getElementById('chatbot');
+      const conversation = document.getElementById('conversation');
+      const inputForm = document.getElementById('input-form');
+      const inputField = document.getElementById('input-field');
+      const input = inputField.value;
+      let message = document.createElement('div');
+      message.classList.add('chatbot-message', 'user-message');
+      message.innerHTML = `<p class="user-chatbot-text">${input}</p>`;
+      conversation.appendChild(message);
+
+      const xhr = new XMLHttpRequest()
+      // Configure the request
+      xhr.open('POST', '/user/{{user.username}}/messages', false); // The third parameter indicates synchronous request
+
+      // Set request headers
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      // Data to be sent in the request body (in JSON format)
+      var postData = {
+        text: input
+      };
+
+      // Convert the data to JSON string
+      var jsonData = JSON.stringify(postData);
+
+      // Send the request with the JSON data
+      xhr.send(jsonData);
+      const jsonResponseText = xhr.responseText;
+      const jsonResponse = JSON.parse(jsonResponseText)
+      const responseText = jsonResponse.response.text
+
+      console.log(jsonResponse)
+      // Clear input field
+      inputField.value = '';
+
+      // Add user input to conversation
+      
+
+      // Generate chatbot response
+      const response = responseText;
+      // makes read Only function while bot is still loading response
+      function onLoadBody() {
+        document.getElementById('input-field').readOnly = true;
+      } 
+    
+      // Add chatbot response to conversation
+      message = document.createElement('div');
+      message.classList.add('chatbot-message','chatbot');
+      message.innerHTML = `<p class="chatbot-text">${response}</p>`;
+      conversation.appendChild(message);
+      message.scrollIntoView({behavior: "smooth"});
+
+      document.getElementById('submit-button').disabled = true; 
+  });
+</script>

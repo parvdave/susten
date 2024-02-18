@@ -5,10 +5,14 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
-class TreeHacksUser(AbstractUser):
+class TreeHacksUser(models.Model):
+    username = models.CharField(max_length=200,default="")
     food_score = models.FloatField()
     transport_score = models.FloatField()
     consumption_score = models.FloatField(default = 0.0)
+
+    levels = models.IntegerField(default=1)
+    points = models.IntegerField(default=0)
 
     # Specify unique related_name values for groups and user_permissions fields
     groups = models.ManyToManyField(

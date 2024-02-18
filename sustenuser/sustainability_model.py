@@ -2,7 +2,7 @@ from monsterapi import client
 import os
 os.environ["MONSTER_API_KEY"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjFhYmNhM2QwNTU2ZjIyNDc0NmEyZTdlMjFlNDA5YmIxIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDItMThUMDA6NDE6MzUuMzM5NDcwIn0.qpKVXWmP-sTizQH3dI7bekI-CLBShLLiDefTxAaEsUg"
 client = client() # Initialize client
-url = "https://api.monsterapi.ai/v1/generate/codellama-13b-instruct"
+url = "https://ad19a9ca-774e-4776-9ddf-5ebd48d406dd.monsterapi.ai"
 # text = "I am going to work by car because no bus is available. Is this ok? I literally do not have any other option!"
 
 def generate_response(text):
